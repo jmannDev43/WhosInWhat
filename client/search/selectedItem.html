@@ -1,0 +1,16 @@
+<template name="selectedItem">
+    <li class="collection-item avatar" data-id="{{tmdbId}}">
+        <div class="col s10">
+            {{#if imagePath}}
+                <img src="{{getImagePath imagePath '185'}}" alt="" class="circle">
+            {{else}}
+                <p><i class="fa fa-film missingPath circle"></i></p>
+            {{/if}}
+            <span class="title">{{title}}</span>
+            <p>{{releaseDate}}</p>
+        </div>
+        <div class="col s2">
+            <i class="fa fa-times removeSelected"></i>
+        </div>
+    </li>
+</template>

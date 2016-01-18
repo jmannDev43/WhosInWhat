@@ -1,0 +1,49 @@
+<template name="selection">
+    <div class="row">
+        <div class="resultSelection col s12">
+            <div class="col offset-l10 s3">
+                <button class="btn waves-effect waves-light" type="submit" name="action">Create Network
+                    <i class="fa fa-arrow-circle-right"></i>
+                </button>
+            </div>
+            <div class="col s12">
+                <div class="col s4">
+                    {{#if actorsExist}}
+                    <ul class="collection">
+                        <li class="selectionType">
+                            <span>Selected Actors</span>
+                        </li>
+                        {{#each selectedActors}}
+                            {{> selectedItem}}
+                        {{/each}}
+                    </ul>
+                    {{/if}}
+                </div>
+                <div class="col s4">
+                    {{#if moviesExist}}
+                    <ul class="collection">
+                        <li class="selectionType">
+                            <span>Selected Movies</span>
+                        </li>
+                        {{#each selectedMovies}}
+                            {{> selectedItem}}
+                        {{/each}}
+                    </ul>
+                    {{/if}}
+                </div>
+                <div class="col s4">
+                    {{#if tvShowsExist}}
+                    <ul class="collection">
+                        <li class="selectionType">
+                            <span>Selected TV Shows</span>
+                        </li>
+                        {{#each selectedTv}}
+                            {{> selectedItem}}
+                        {{/each}}
+                    </ul>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

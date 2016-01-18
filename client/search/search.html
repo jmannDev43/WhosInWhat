@@ -1,0 +1,28 @@
+<template name="search">
+    <div class="src-cntr">
+        <form class="offset-m4">
+            <div class="row">
+                <div class="srchInputs col offset-l5 s6">
+                    <div class="input-field">
+                        <input id="movie" type="text" class="validate movieTxt">
+                        <label for="movie">Enter Movie, TV Show, or Actor Name</label>
+                    </div>
+                </div>
+            <div class="row">
+                <div class="srchResults col offset-l5 s6">
+                    <div class="col s12">
+                        {{#if resultsExists}}
+                        <ul class="collection">
+                            {{#each searchResults}}
+                                {{> searchResultItem}}
+                            {{/each}}
+                        </ul>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+            </div>
+        </form>
+    </div>
+    {{> selection}}
+</template>
