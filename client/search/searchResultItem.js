@@ -6,4 +6,18 @@ Template.searchResultItem.events({
                console.log(err);
         });
     }
-})
+});
+
+Template.searchResultItem.helpers({
+   formatedMediaType: function(){
+       var convertVals = {
+           tv: 'TV Show',
+           person: 'Actor',
+           movie: 'Movie'
+       }
+       return convertVals[this.mediaType];
+   },
+   formatedReleaseDate: function(){
+        return this.releaseDate ? '(' + this.releaseDate.toString() + ')' : '';
+   }
+});
