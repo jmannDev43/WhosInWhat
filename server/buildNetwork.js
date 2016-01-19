@@ -2,16 +2,17 @@ Meteor.methods({
    'loadInitialNetwork': function(){
         var all = SelectedItems.find().fetch();
         var elementsObj = {}, nodeArray = [], linkArray = [], nodeIdArray = [];
-
+        var imageUrl = 'https://image.tmdb.org/t/p/w185';
        all.forEach(function(el, idx){
 
            // Push Top-Level selectedItems
            if (nodeIdArray.indexOf(el.tmdbId) === -1){
+               var imagePath = el['imagePath'] ? imageUrl + el['imagePath'] : 'missing.png';
                nodeArray.push({
                    data: {
                        id: el.tmdbId,
                        title: el.title,
-                       imagePath: el.imagePath,
+                       imagePath: imagePath,
                        mediaType: el.mediaType
                    }
                });
@@ -21,12 +22,13 @@ Meteor.methods({
            // If 'person' and has initialLinks (credits), add those links as nodes
            if (el.mediaType === 'person' && el.initialLinks.length > 0){
                el.initialLinks.forEach(function(credit, n){
+                   imagePath = credit['poster_path'] ? imageUrl + credit['poster_path'] : 'missing.png';
                   if (nodeIdArray.indexOf(credit.id) === -1){
                       nodeArray.push({
                           data: {
                               id: credit.id,
                               title: credit.title,
-                              imagePath: credit.poster_path,
+                              imagePath: imagePath,
                               mediaType: null,
                               character: credit.character
                           }
