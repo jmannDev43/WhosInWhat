@@ -49,7 +49,7 @@ storeSearchResults = function(data){
 getActorCredits = function(tmdbId){
     var resp = Async.runSync(function(done){
         mdb.personCredits({ id: tmdbId }, function(err, credits){
-            console.log(credits);
+            //console.log(credits);
             done(null, credits);
         });
     });
