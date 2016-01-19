@@ -11,11 +11,15 @@ Template.search.events({
     'blur .movieTxt': function(e){
         var title = $(e.target).val();
         //start loader maybe
-        Meteor.call('getSearchResults', title, function(err, resp){
-            if (err)
-                console.log(err);
+        if (title){
+            Meteor.call('getSearchResults', title, function(err, resp){
+                if (err)
+                    console.log(err);
 
-            //console.log(resp);
-        });
+                if (!resp){
+                    Materialize.toast('No results found.', 2000, 'noResults');
+                }
+            });
+        }
     }
 });

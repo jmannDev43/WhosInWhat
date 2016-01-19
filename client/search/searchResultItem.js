@@ -4,6 +4,8 @@ Template.searchResultItem.events({
         Meteor.call('addSelection', data, function(err, resp){
            if (err)
                console.log(err);
+
+           $('.movieTxt').val('');
         });
     }
 });

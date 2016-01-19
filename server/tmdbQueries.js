@@ -14,9 +14,10 @@ Meteor.methods({
            });
        });
 
+        console.log(resp);
         SearchResults.remove({});
 
-        if (resp['result'] && resp['result']['results']){
+        if (resp['result']['results'] && resp['result']['results'].length > 0){
             resp.result.results.forEach(function(el, idx){
                 storeSearchResults(el);
             });
@@ -30,7 +31,9 @@ Meteor.methods({
     removeSelection: function(id){
         SelectedItems.remove({_id: id});
     },
-
+    clearSearchResults: function(){
+        SearchResults.remove({});
+    }
 });
 
 storeSearchResults = function(data){
