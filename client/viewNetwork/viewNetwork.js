@@ -13,18 +13,24 @@ Template.viewNetwork.onRendered(function(){
            nodes: nodes,
            edges: edges
        },
-       //style: cytoscape.stylesheet().selector('node').style({
-       //   'background-image': function(el) {
-       //       return el.data('imagePath') ? imageUrl + el.data('imagePath') : null;
-       //   }
-       //}),
-
         layout: {
-            name: 'breadthfirst',
-            directed: true,
+            name: 'concentric',
             padding: 0,
-            fit: true
+            animate: false
         }
+    });
+
+    var nodes = cy.nodes();
+    nodes.forEach(function(node, idx){
+       node.css('background-image', node.data('imagePath'));
+       node.css('background-size', '30px 30px');
+       node.css('background-height', '30px');
+       node.css('background-width', '30px');
+       node.css('height', '30px');
+       node.css('width', '30px');
+       node.css('content', node.data('title'));
+       node.css('color', '#1565C0');
+       node.css('font-size', '5px');
     });
 
 });

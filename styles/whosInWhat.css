@@ -132,8 +132,8 @@ input:not([type]):focus:not([readonly]) + label, input[type=text]:focus:not([rea
 }
 
 node {
-    height: 30;
-    width: 30;
+    height: 80px;
+    width: 80px;
     background-fit: 'cover';
     border: 1px solid grey;
 }
