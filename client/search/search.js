@@ -8,18 +8,20 @@ Template.search.helpers({
 });
 
 Template.search.events({
-    'blur .movieTxt': function(e){
-        var title = $(e.target).val();
+    'blur .movieTxt, submit form': function(e){
+        e.preventDefault();
+        var title = $('.movieTxt').val();
         //start loader maybe
         if (title){
-            Meteor.call('getSearchResults', title, function(err, resp){
-                if (err)
-                    console.log(err);
-
-                if (!resp){
-                    Materialize.toast('No results found.', 2000, 'noResults');
-                }
-            });
+            Router.go('/?srchStr=' + title);
+            //Meteor.call('getSearchResults', title, function(err, resp){
+            //    if (err)
+            //        console.log(err);
+            //
+            //    if (!resp){
+            //        Materialize.toast('No results found.', 2000, 'noResults');
+            //    }
+            //});
         }
     }
 });
