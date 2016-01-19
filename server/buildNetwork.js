@@ -51,16 +51,8 @@ Meteor.methods({
            }
        });
 
-       //console.log('nodeArray: ', nodeArray);
-       //console.log('linkArray: ', nodeArray);
-       //elementsObj['nodes'] = nodeArray;
-       //if (linkArray.length > 0){
-       //    elementsObj['edges'] = linkArray;
-       //}
-
        Nodes.insert(nodeArray);
        if (linkArray.length > 0)
            Links.insert(linkArray);
-       //NetworkItems.insert(elementsObj);
    }
 });

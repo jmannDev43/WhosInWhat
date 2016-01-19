@@ -13,6 +13,9 @@ Template.viewNetwork.onRendered(function(){
            nodes: nodes,
            edges: edges
        },
+        style: cytoscape.stylesheet().selector('edge').css({
+            'line-color': '#B2B2B2',
+        }),
         layout: {
             name: 'cose',
             padding: 0,
@@ -32,6 +35,13 @@ Template.viewNetwork.onRendered(function(){
        node.css('content', node.data('title'));
        node.css('color', '#1565C0');
        node.css('font-size', '5px');
+
+        if (node.data('mediaType') != 'person' && node._private.edges.length > 1){
+            node._private.edges.forEach(function(edge, idx){
+                edge.css('line-color', '#1565C0');
+                edge.css('width', '2');
+            });
+        }
     });
 
 });
