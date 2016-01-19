@@ -1,9 +1,13 @@
 Meteor.methods({
    'loadInitialNetwork': function(){
+
+        Nodes.remove({});
+        Links.remove({});
+
         var all = SelectedItems.find().fetch();
         var elementsObj = {}, nodeArray = [], linkArray = [], nodeIdArray = [];
         var imageUrl = 'https://image.tmdb.org/t/p/w185';
-       all.forEach(function(el, idx){
+        all.forEach(function(el, idx){
 
            // Push Top-Level selectedItems
            if (nodeIdArray.indexOf(el.tmdbId) === -1){

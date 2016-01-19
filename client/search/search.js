@@ -2,9 +2,6 @@ Template.search.helpers({
     searchResults: function () {
         return SearchResults.find();
     },
-    selectedItem: function(){
-        return SelectedItems.find();
-    },
     resultsExists: function () {
         return SearchResults.find().count() > 0;
     }
@@ -18,7 +15,7 @@ Template.search.events({
             if (err)
                 console.log(err);
 
-            console.log(resp);
+            //console.log(resp);
         });
     }
 });

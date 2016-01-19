@@ -14,8 +14,9 @@ Template.viewNetwork.onRendered(function(){
            edges: edges
        },
         layout: {
-            name: 'concentric',
+            name: 'cose',
             padding: 0,
+            fit: true,
             animate: false
         }
     });
