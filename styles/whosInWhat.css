@@ -126,6 +126,10 @@ input:not([type]):focus:not([readonly]) + label, input[type=text]:focus:not([rea
     line-height: 1;
 }
 
+.noResults {
+    background-color: #cd5656;
+}
+
 /* Cytoscape styles */
 
 .cytoscapeCtnr {
