@@ -19,22 +19,52 @@ Meteor.publish('searchResults', function(srchStr){
             mediaType: data.media_type,
             connectionId: self.connection.id
         };
-        self.added('searchResults', data.id, resultProps);
+        console.log(resultProps);
+        self.added('searchResults', data.id.toString() + self.connection.id, resultProps);
     });
 
     self.ready();
 
     self.onStop(function(){
         _.each(results, function(data){
-            self.removed('SearchResults', data.id);
+            self.removed('SearchResults', self.connection.id);
         }) ;
     });
 
-    //var initialLinks;
-    //if (data.media_type === 'person'){
-    //    initialLinks = getActorCredits(data.id);
-    //}
-    //SearchResults.insert({ tmdbId: data.id, title: title, imagePath: imagePath, releaseDate: releaseDate, mediaType: data.media_type, initialLinks: initialLinks });
-
-
 });
+
+Meteor.publish('selectedItems', function() {
+    return SelectedItems.find({ connectionId: this.connection.id });
+});
+
+Meteor.publish('nodes', function(){
+    return Nodes.find();
+   //return Nodes.find({ connectionId: this.connection.id });
+});
+
+Meteor.publish('links', function(){
+    return Links.find();
+    //return Links.find({ connectionId: this.connection.id });
+});
+
+
+//Meteor.publish('selectedItems', function(_id){
+//
+//    if (typeof _id !== 'string'){
+//        return this.ready();
+//    }
+//
+//    //var self = this;
+//    //var data = SearchResults.findOne({ _id: _id });
+//    //
+//    //var initialLinks = tmdb.getActorCredits(data.tmdbId);
+//    //var selectedItem = _.extend(data, initialLinks);
+//
+//    self.added('selectedItems', selectedItem.id, selectedItem);
+//
+//    self.ready();
+//
+//    //self.onStop(function(){
+//    //    _.each()
+//    //});
+//});
