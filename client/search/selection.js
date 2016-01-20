@@ -25,13 +25,15 @@ Template.selection.helpers({
 Template.selection.events({
     'click .createNetwork': function(e, template){
         // get data from SelectedItems collection
-
+          Meteor.call('clearNetwork', function(err, resp){
+              loadInitialNetwork();
+          });
 //        loadInitialNetwork();
-        Meteor.call('loadInitialNetwork', function(err, resp){
-           if (!err){
-               Router.go('viewNetwork');
-           }
-        });
+//        Meteor.call('loadInitialNetwork', function(err, resp){
+//           if (!err){
+//               Router.go('viewNetwork');
+//           }
+//        });
 
         // make lazy-loading requests for each selected item (in a way that allows for expand/collapse)
 
