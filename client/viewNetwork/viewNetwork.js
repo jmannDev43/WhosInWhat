@@ -1,5 +1,7 @@
 Template.viewNetwork.onRendered(function(){
     // convert collections back into arrays
+
+
     var nodes = Nodes.find().fetch()[0];
     nodes = $.map(nodes, function(el) { return typeof el === 'object' ? el : null });
     var edges = Links.find().fetch()[0];

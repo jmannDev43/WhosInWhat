@@ -1,12 +1,20 @@
 Template.searchResultItem.events({
     'click .collection-item': function(e, template){
         var data = template.data;
-        Meteor.call('addSelection', data, function(err, resp){
-           if (err)
-               console.log(err);
-
-           $('.movieTxt').val('');
+        //Router.go('/?selectedId=' + data._id);
+        Meteor.call('getActorCredits', data, function(err, resp){
+            //console.log(resp);
+            //SelectedItems.insert(resp)
+            Router.go('search');
         });
+
+
+        //Meteor.call('addSelection', data, function(err, resp){
+        //   if (err)
+        //       console.log(err);
+        //
+        //   $('.movieTxt').val('');
+        //});
     }
 });
 
