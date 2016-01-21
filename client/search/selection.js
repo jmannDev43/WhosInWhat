@@ -28,12 +28,6 @@ Template.selection.events({
           Meteor.call('clearNetwork', function(err, resp){
               loadInitialNetwork();
           });
-//        loadInitialNetwork();
-//        Meteor.call('loadInitialNetwork', function(err, resp){
-//           if (!err){
-//               Router.go('viewNetwork');
-//           }
-//        });
 
         // make lazy-loading requests for each selected item (in a way that allows for expand/collapse)
 
