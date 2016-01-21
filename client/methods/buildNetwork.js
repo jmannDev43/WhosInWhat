@@ -58,5 +58,10 @@ loadInitialNetwork = function(){
     if (linkArray.length > 0)
         Links.insert(linkArray);
 
-    Router.go('viewNetwork');
+    Meteor.call('clearSelections', function(err, resp){
+        if (err)
+            console.log(err);
+
+        Router.go('viewNetwork');
+    });
 }

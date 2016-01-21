@@ -1,20 +1,12 @@
 Template.searchResultItem.events({
     'click .collection-item': function(e, template){
         var data = template.data;
-        //Router.go('/?selectedId=' + data._id);
-        Meteor.call('getActorCredits', data, function(err, resp){
-            //console.log(resp);
-            //SelectedItems.insert(resp)
-            Router.go('search');
+        Meteor.call('addSelection', data, function(err, resp){
+            if (resp.duplicate)
+                Materialize.toast(data.title + ' already selected.', 2000, 'toastError');
+
+            Router.go('search'); // removes SearchResults, since route is changing
         });
-
-
-        //Meteor.call('addSelection', data, function(err, resp){
-        //   if (err)
-        //       console.log(err);
-        //
-        //   $('.movieTxt').val('');
-        //});
     }
 });
 

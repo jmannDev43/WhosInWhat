@@ -1,22 +1,36 @@
 Meteor.methods({
-    getActorCredits: function(data){ // eventually refactor to use userId instead of connectionId
-        if (data.mediaType === 'person'){
-            var credits = tmdb.getActorCredits(data.tmdbId);
+    addSelection: function(data){ // eventually refactor to use userId instead of connectionId
+        var existingRecord = SelectedItems.find({tmdbId: data.tmdbId}).count();
 
-            console.log(this.connection.id);
-            if (credits){
-                //var selectedItem = _.extend(data, credits);
-                data['initialLinks'] = credits;
-                //SearchResults.remove({ connectionId: this.connection.id });
+        if (!existingRecord){
+            if (data.mediaType === 'person'){
+                var credits = tmdb.getActorCredits(data.tmdbId);
 
-            } else {
-                data['initialLinks'] = null;
+                console.log(this.connection.id);
+                if (credits){
+                    data['initialLinks'] = credits;
+
+                } else {
+                    data['initialLinks'] = null;
+                }
+                SelectedItems.insert(data);
             }
-            SelectedItems.insert(data);
+        } else {
+            return { duplicate: true };
         }
+
+        return { duplicate: false };
     },
-    removeSelection: function(id){
-        SelectedItems.remove({_id: id});
+    addMovieCast: function(tmdbId){
+        var cast = tmdb.getMovieCredits(tmdbId) || {};
+        //console.log('cast: ', cast);
+        return cast;
+    },
+    removeSelection: function(_id){
+        SelectedItems.remove({_id: _id});
+    },
+    clearSelections: function(){
+        SelectedItems.remove({ connectionId: this.connection.id });
     },
     clearNetwork: function(){
         Nodes.remove({});
