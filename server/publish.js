@@ -12,14 +12,13 @@ Meteor.publish('searchResults', function(srchStr){
         title = data['name'] ? data['name'] : data['title'];
 
         var resultProps = {
-            tmdbId: data.id,
+            id: data.id,
             title: title,
             imagePath: imagePath,
             releaseDate: releaseDate,
-            mediaType: data.media_type,
+            media_type: data.media_type,
             connectionId: self.connection.id
         };
-        console.log(resultProps);
         self.added('searchResults', data.id.toString() + self.connection.id, resultProps);
     });
 
