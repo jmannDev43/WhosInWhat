@@ -12,9 +12,18 @@ _.extend(tmdb, {
         });
         return Meteor._get(resp, 'result', 'results');
     },
-    getActorCredits: function(tmdbId){ // eventually refactor to use userId instead of connectionId
+    'getMovieCredits': function getResultsById(id){
+
         var resp = Async.runSync(function(done){
-            mdb.personCredits({ id: tmdbId }, function(err, credits){
+            mdb.movieCredits({id: id }, function(err, list){
+                done(null, list);
+            });
+        });
+        return Meteor._get(resp, 'result', 'cast');
+    },
+    getActorCredits: function(id){ // eventually refactor to use userId instead of connectionId
+        var resp = Async.runSync(function(done){
+            mdb.personCredits({ id: id }, function(err, credits){
                 done(null, credits);
             });
         });
