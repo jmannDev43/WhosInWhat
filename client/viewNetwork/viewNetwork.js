@@ -27,7 +27,10 @@ Template.viewNetwork.onRendered(function(){
     styleNodes(nodes);
 
     cy.on('tap', 'node', loadMovieCast);
-
+    if (!networkBuilder.hasBeenNotified){
+        Materialize.toast('Click on a movie / TV show to display it\'s cast. Click on an actor to display his/her film credits.', 4500);
+        networkBuilder.hasBeenNotified = true;
+    }
 });
 
 loadMovieCast = function(){
