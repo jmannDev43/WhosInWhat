@@ -1,62 +1,91 @@
-loadInitialNetwork = function(){
 
-    var all = SelectedItems.find().fetch();
-    all = $.map(all, function(el) { return typeof el === 'object' ? el : null });
+networkBuilder = {
+    nodeArray: [],
+    linkArray: [],
+    nodeIdArray: [],
+    linkIdArray: [],
+    imageUrl: 'https://image.tmdb.org/t/p/w185',
+    imageFields: ['imagePath','poster_path','profile_path'],
+    getImagePath: function(el){
+        var path;
+        var imageField = _.intersection(_.keys(el), networkBuilder.imageFields);
+        if (el[imageField]){
+            path = imageField === 'imagePath' ? el[imageField] : networkBuilder.imageUrl + el[imageField];
+        } else {
+            path = 'missing.png';
+        }
+        return path;
+    },
+    getTitle: function(el){
+        return el['name'] ? el['name'] : el['title'];
+    },
+    getNodesAndLinks: function(arrayOfNewNodes, sourceId){
+        networkBuilder.addNodes(arrayOfNewNodes, sourceId);
 
-    //console.log(all);
+        return  {nodes: networkBuilder.nodeArray, links: networkBuilder.linkArray};
+    },
+    loadInitialNetwork: function(){
+        networkBuilder.nodeArray = []; networkBuilder.linkArray = [];
+        networkBuilder.nodeIdArray = []; networkBuilder.linkIdArray = [];
 
-    var elementsObj = {}, nodeArray = [], linkArray = [], nodeIdArray = [];
-    var imageUrl = 'https://image.tmdb.org/t/p/w185';
-    all.forEach(function(el, idx){
+        //var nodeArray = [], linkArray = [];
+        var newNodesCursor = SelectedItems.find().fetch();
+        var arrayOfNewNodes = $.map(newNodesCursor, function(el) { return typeof el === 'object' ? el : null });
+
+        var networkObject = networkBuilder.getNodesAndLinks(arrayOfNewNodes);
+
+        Nodes.insert(networkObject.nodes);
+        if (networkObject.links.length > 0)
+            Links.insert(networkObject.links);
+
+        Meteor.call('clearSelections', function(err, resp){
+            if (err)
+                console.log(err);
+
+            Router.go('viewNetwork');
+        });
+    },
+    addNodes: function(arrayOfNewNodes, sourceId){
+        arrayOfNewNodes.forEach(function(el, idx){
+            networkBuilder.addNode(el);
+            if (el['relatedNodes']){
+                sourceId = el.id;
+                networkBuilder.addNodes(el.relatedNodes, sourceId);
+            }
+            if (sourceId){
+                networkBuilder.addLink(el, sourceId);
+            }
+        });
+    },
+    addNode: function(el){
+        var title = networkBuilder.getTitle(el);
+        var imagePath = networkBuilder.getImagePath(el);
 
         // Push Top-Level selectedItems
-        if (nodeIdArray.indexOf(el.tmdbId) === -1){
-            var imagePath = el['imagePath'] ? imageUrl + el['imagePath'] : 'missing.png';
-            nodeArray.push({
+        if (networkBuilder.nodeIdArray.indexOf(el.id) === -1){
+            networkBuilder.nodeArray.push({
+                group: 'nodes',
                 data: {
-                    id: el.tmdbId,
-                    connectionId: el.connectionId,
-                    title: el.title,
+                    id: el.id.toString(),
+                    title: title,
                     imagePath: imagePath,
-                    mediaType: el.mediaType
+                    media_type: el['media_type'] || 'movie'
                 }
             });
-            nodeIdArray.push(el.tmdbId);
+            networkBuilder.nodeIdArray.push(el.id);
         }
-
-        // If 'person' and has initialLinks (credits), add those links as nodes
-        if (el.mediaType === 'person' && el.initialLinks.length > 0){
-            el.initialLinks.forEach(function(credit, n){
-                imagePath = credit['poster_path'] ? imageUrl + credit['poster_path'] : 'missing.png';
-                if (nodeIdArray.indexOf(credit.id) === -1){
-                    nodeArray.push({
-                        data: {
-                            id: credit.id,
-                            connectionId: el.connectionId,
-                            title: credit.title,
-                            imagePath: imagePath,
-                            mediaType: null,
-                            character: credit.character
-                        }
-                    });
-                    nodeIdArray.push(credit.id);
+    },
+    addLink: function(el, sourceId){
+        // Build link array at the same time
+        if (el.id !== sourceId){
+            networkBuilder.linkArray.push({
+                group: 'edges',
+                data: {
+                    source: sourceId.toString(),
+                    target: el.id.toString()
                 }
-
-                // Build link array at the same time
-                linkArray.push({
-                    data: {
-                        connectionId: el.connectionId,
-                        source: el.tmdbId,
-                        target: credit.id
-                    }
-                });
             });
         }
-    });
-    //console.log('hi :)')
-    Nodes.insert(nodeArray);
-    if (linkArray.length > 0)
-        Links.insert(linkArray);
-
-    Router.go('viewNetwork');
+    }
 }
+
