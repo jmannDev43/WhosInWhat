@@ -6,6 +6,7 @@ networkBuilder = {
     linkIdArray: [],
     imageUrl: 'https://image.tmdb.org/t/p/w185',
     imageFields: ['imagePath','poster_path','profile_path'],
+    lastMethodName: '',
     getImagePath: function(el){
         var path;
         var imageField = _.intersection(_.keys(el), networkBuilder.imageFields);
@@ -71,7 +72,7 @@ networkBuilder = {
                     id: el.id.toString(),
                     title: title,
                     imagePath: imagePath,
-                    media_type: el['media_type'] || 'movie'
+                    media_type: el['media_type'] || networkBuilder.lastMediaType
                 }
             });
             networkBuilder.nodeIdArray.push(el.id);
