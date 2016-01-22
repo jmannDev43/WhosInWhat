@@ -13,16 +13,19 @@ Meteor.methods({
                 } else {
                     data['relatedNodes'] = null;
                 }
-                SelectedItems.insert(data);
             }
         } else {
             return { duplicate: true };
         }
-
+        SelectedItems.insert(data);
         return { duplicate: false };
     },
     addMovieCast: function(id){
         var cast = tmdb.getMovieCredits(id) || {};
+        return cast;
+    },
+    addTvCast: function(id){
+        var cast = tmdb.getTvCredits(id) || {};
         return cast;
     },
     addActorCredits: function(id){

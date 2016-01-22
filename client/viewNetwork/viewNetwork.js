@@ -2,8 +2,10 @@ Template.viewNetwork.onRendered(function(){
     // convert collections back into arrays
     var nodes = Nodes.find().fetch()[0];
     nodes = $.map(nodes, function(el) { return typeof el === 'object' ? el : null });
-    var edges = Links.find().fetch()[0];
-    edges = $.map(edges, function(el) { return typeof el === 'object' ? el : null });
+    var edges = Links.find().fetch()[0] || [];
+
+    if (edges.length > 0)
+        edges = $.map(edges, function(el) { return typeof el === 'object' ? el : null });
 
     // build cytoscape network / UI
     cy = cytoscape({
@@ -28,7 +30,10 @@ Template.viewNetwork.onRendered(function(){
 
     cy.on('tap', 'node', loadMovieCast);
     if (!networkBuilder.hasBeenNotified){
-        Materialize.toast('Click on a movie / TV show to display it\'s cast. Click on an actor to display his/her film credits.', 4500);
+        Materialize.toast('Click on a movie / TV show to display it\'s cast. Click on an actor to display his/her film credits.', 5500);
+        Meteor.setTimeout(function(){
+            Materialize.toast('You can also use the mouse to pan, zoom, and move (drag) items in the graph.', 5500);
+        }, 2000);
         networkBuilder.hasBeenNotified = true;
     }
 });
@@ -40,7 +45,12 @@ loadMovieCast = function(){
     var sourceId = data.id;
 
     // dynamically determine which server method to call...
-    var methodName = data['media_type'] === 'person' ? 'addActorCredits' : 'addMovieCast';
+    var methodsByMediaType = {
+        person: 'addActorCredits',
+        movie: 'addMovieCast',
+        tv: 'addTvCast'
+    };
+    var methodName = methodsByMediaType[data['media_type']];
 
     Meteor.call(methodName, sourceId, function(err, resp){
 
