@@ -3,7 +3,7 @@ var lastId;
 
 tmdb = {};
 _.extend(tmdb, {
-    'getSearchResults': function getSearchResults(title){
+    getSearchResults: function(title){
         var resp = Async.runSync(function(done){
             var encodedTitle = encodeURIComponent(title);
             mdb.searchMulti({query: encodedTitle }, function(err, list){
@@ -12,10 +12,17 @@ _.extend(tmdb, {
         });
         return Meteor._get(resp, 'result', 'results');
     },
-    'getMovieCredits': function getResultsById(id){
-
+    getMovieCredits: function (id){
         var resp = Async.runSync(function(done){
             mdb.movieCredits({id: id }, function(err, list){
+                done(null, list);
+            });
+        });
+        return Meteor._get(resp, 'result', 'cast');
+    },
+    getTvCredits: function(id){
+        var resp = Async.runSync(function(done){
+            mdb.tvCredits({id: id }, function(err, list){
                 done(null, list);
             });
         });
