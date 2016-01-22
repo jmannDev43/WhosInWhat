@@ -24,11 +24,12 @@ networkBuilder = {
 
         return  {nodes: networkBuilder.nodeArray, links: networkBuilder.linkArray};
     },
-    loadInitialNetwork: function(){
+    clearNetwork: function(){
         networkBuilder.nodeArray = []; networkBuilder.linkArray = [];
         networkBuilder.nodeIdArray = []; networkBuilder.linkIdArray = [];
-
-        //var nodeArray = [], linkArray = [];
+    },
+    loadInitialNetwork: function(){
+        networkBuilder.clearNetwork();
         var newNodesCursor = SelectedItems.find().fetch();
         var arrayOfNewNodes = $.map(newNodesCursor, function(el) { return typeof el === 'object' ? el : null });
 
