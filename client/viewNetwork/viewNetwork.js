@@ -31,6 +31,7 @@ Template.viewNetwork.onRendered(function(){
 });
 
 loadMovieCast = function(){
+    networkBuilder.clearNetwork();
     var tapped = this;
     var data = tapped.data();
     var sourceId = data.id;
@@ -74,7 +75,7 @@ styleNodes = function(nodes){
         node.css('font-size', '5px');
 
         var deg = node.degree(true);
-        if (deg > 1) {
+        if (deg > 2) {
             highDegreeNodes.push(node);
         }
     });
@@ -82,8 +83,11 @@ styleNodes = function(nodes){
     var highDegreeNodeCombinations = pairwise(highDegreeNodes);
     _.each(highDegreeNodeCombinations, function(comb){
        var nodeA = comb[0], nodeB = comb[1];
-       var edge = nodeA.edgesTo(nodeB);
-       edge.css('line-color', '#1565C0');
+        var dij = cy.elements().dijkstra(nodeA, function() { return 1; });
+        var edges = dij.pathTo(nodeB);
+        _.each(edges, function(edge){
+            edge.css('line-color', '#1565C0');
+        });
     });
 }
 
