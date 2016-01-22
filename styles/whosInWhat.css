@@ -138,6 +138,6 @@ input:not([type]):focus:not([readonly]) + label, input[type=text]:focus:not([rea
     position: absolute;
     left: 0;
     top: 0;
-    background: rgba(255,255,255,0.6);
+    background: rgba(255,255,255,0.5);
     border: 4px solid #1565C0;
 }

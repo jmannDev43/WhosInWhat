@@ -17,7 +17,7 @@ Template.searchResultItem.helpers({
            person: 'Actor',
            movie: 'Movie'
        }
-       return convertVals[this.mediaType];
+       return convertVals[this.media_type];
    },
    formatedReleaseDate: function(){
         return this.releaseDate ? '(' + this.releaseDate.toString() + ')' : '';

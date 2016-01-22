@@ -1,17 +1,17 @@
 Meteor.methods({
     addSelection: function(data){ // eventually refactor to use userId instead of connectionId
-        var existingRecord = SelectedItems.find({tmdbId: data.tmdbId}).count();
+        var existingRecord = SelectedItems.find({id: data.id}).count();
 
         if (!existingRecord){
-            if (data.mediaType === 'person'){
-                var credits = tmdb.getActorCredits(data.tmdbId);
+            // relatedNodes ARE ONLY LOADED FOR SELECTED PEOPLE (NOT SELECTED MOVIES)
+            if (data.media_type === 'person'){
+                var credits = tmdb.getActorCredits(data.id);
 
-                console.log(this.connection.id);
                 if (credits){
-                    data['initialLinks'] = credits;
+                    data['relatedNodes'] = credits;
 
                 } else {
-                    data['initialLinks'] = null;
+                    data['relatedNodes'] = null;
                 }
                 SelectedItems.insert(data);
             }
@@ -21,10 +21,13 @@ Meteor.methods({
 
         return { duplicate: false };
     },
-    addMovieCast: function(tmdbId){
-        var cast = tmdb.getMovieCredits(tmdbId) || {};
-        //console.log('cast: ', cast);
+    addMovieCast: function(id){
+        var cast = tmdb.getMovieCredits(id) || {};
         return cast;
+    },
+    addActorCredits: function(id){
+        var credits = tmdb.getActorCredits(id) || {};
+        return credits;
     },
     removeSelection: function(_id){
         SelectedItems.remove({_id: _id});

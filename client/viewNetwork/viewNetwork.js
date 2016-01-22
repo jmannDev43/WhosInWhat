@@ -5,7 +5,6 @@ Template.viewNetwork.onRendered(function(){
     var edges = Links.find().fetch()[0];
     edges = $.map(edges, function(el) { return typeof el === 'object' ? el : null });
 
-    imageUrl = 'https://image.tmdb.org/t/p/w185';
     // build cytoscape network / UI
     cy = cytoscape({
        container: $('.cytoscapeCtnr'),
@@ -14,7 +13,7 @@ Template.viewNetwork.onRendered(function(){
            edges: edges
        },
         style: cytoscape.stylesheet().selector('edge').css({
-            'line-color': '#B2B2B2',
+            'line-color': '#adadad',
         }),
         layout: {
             name: 'cose',
@@ -25,99 +24,73 @@ Template.viewNetwork.onRendered(function(){
     });
 
     var nodes = cy.nodes();
-    nodes.forEach(function(node, idx){
-       node.css('background-image', node.data('imagePath'));
-       node.css('background-size', '30px 30px');
-       node.css('background-height', '30px');
-       node.css('background-width', '30px');
-       node.css('height', '30px');
-       node.css('width', '30px');
-       node.css('content', node.data('title'));
-       node.css('color', '#1565C0');
-       node.css('font-size', '5px');
-
-        if (node.data('mediaType') != 'person' && node._private.edges.length > 1){
-            node._private.edges.forEach(function(edge, idx){
-                edge.css('line-color', '#1565C0');
-                edge.css('width', '2');
-            });
-        }
-    });
+    styleNodes(nodes);
 
     cy.on('tap', 'node', loadMovieCast);
-
-    //cy.on('add', 'node, edge', function(e){
-    //    e.cyTarget.css('opacity', 0);
-    //    e.cyTarget.animate({ opacity: 1}, 500);
-    //});
 
 });
 
 loadMovieCast = function(){
-
     var tapped = this;
     var data = tapped.data();
     var sourceId = data.id;
-    // could dynamically determine which method here
-    Meteor.call('addMovieCast', sourceId, function(err, resp){
 
-        var nodeArray = [], nodeIdArray = [], linkArray = [];
-        var imagePath = null, title = null;
-        var imageUrl = 'https://image.tmdb.org/t/p/w185';
-        resp.forEach(function(el, idx) {
-            var imageShort = el['profile_path'] ? el['profile_path'] : el['poster_path'];
-            title = el['name'] ? el['name'] : el['title'];
-            // Push Top-Level selectedItems
-            if (nodeIdArray.indexOf(el.id) === -1) {
-                var imagePath = imageShort ? imageUrl + imageShort : 'missing.png';
-                nodeArray.push({
-                    group: 'nodes',
-                    data: {
-                        id: el.id.toString(),
-                        title: title,
-                        imagePath: imagePath,
-                        mediaType: 'person'
-                    }
-                });
-                nodeIdArray.push(el.id);
+    // dynamically determine which server method to call...
+    var methodName = data['media_type'] === 'person' ? 'addActorCredits' : 'addMovieCast';
 
-                // Don't add link for single person connected to it (make more robust)
-                if (el.id !== sourceId){
-                    linkArray.push({
-                        group: 'edges',
-                        data: {
-                            source: el.id.toString(),
-                            target: sourceId
-                        }
-                    });
-                }
-            }
-        });
+    Meteor.call(methodName, sourceId, function(err, resp){
+
+        //var parentNodeWithChildren = _.extend(data, resp);
+        data['relatedNodes'] = resp;
+        var parentNodeWithChildren = $.map(data, function(el) { return typeof el === 'object' ? el : null });
+
+        var networkObj = networkBuilder.getNodesAndLinks(parentNodeWithChildren, sourceId);
         console.log(cy.nodes().length);
-        cy.add(nodeArray);
-        cy.add(linkArray);
+        cy.add(networkObj.nodes);
+        cy.add(networkObj.links);
         console.log(cy.nodes().length);
 
         var nodes = cy.nodes();
-        nodes.forEach(function(node, idx) {
-            node.css('background-image', node.data('imagePath'));
-            node.css('background-size', '30px 30px');
-            node.css('background-height', '30px');
-            node.css('background-width', '30px');
-            node.css('height', '30px');
-            node.css('width', '30px');
-            node.css('content', node.data('title'));
-            node.css('color', '#1565C0');
-            node.css('font-size', '5px');
-
-            if (node.data('mediaType') != 'person' && node._private.edges.length > 1) {
-                node._private.edges.forEach(function (edge, idx) {
-                    edge.css('line-color', '#1565C0');
-                    edge.css('width', '2');
-                });
-            }
-        });
+        styleNodes(nodes);
 
         cy.layout({ name: 'cose', fit: true, animation: true, padding: 0 });
     });
+}
+
+styleNodes = function(nodes){
+    var highDegreeNodes = [], highlightedEdges = [];
+    nodes.forEach(function(node, idx){
+        var imagePathField = _.intersection(networkBuilder.imageFields, _.keys(node.data()))[0];
+        var titleField = _.intersection(['name','title'], _.keys(node.data()))[0];
+
+        node.css('background-image', node.data(imagePathField));
+        node.css('background-size', '30px 30px');
+        node.css('background-height', '30px');
+        node.css('background-width', '30px');
+        node.css('height', '30px');
+        node.css('width', '30px');
+        node.css('content', node.data(titleField));
+        node.css('color', '#1565C0');
+        node.css('font-size', '5px');
+
+        var deg = node.degree(true);
+        if (deg > 1) {
+            highDegreeNodes.push(node);
+        }
+    });
+
+    var highDegreeNodeCombinations = pairwise(highDegreeNodes);
+    _.each(highDegreeNodeCombinations, function(comb){
+       var nodeA = comb[0], nodeB = comb[1];
+       var edge = nodeA.edgesTo(nodeB);
+       edge.css('line-color', '#1565C0');
+    });
+}
+
+pairwise = function(list) {
+    if (list.length < 2) { return []; }
+    var first = _.first(list),
+        rest  = _.rest(list),
+        pairs = _.map(rest, function (x) { return [first, x]; });
+    return _.flatten([pairs, pairwise(rest)], true);
 }
