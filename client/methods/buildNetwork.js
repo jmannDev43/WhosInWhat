@@ -28,6 +28,7 @@ networkBuilder = {
         networkBuilder.nodeArray = []; networkBuilder.linkArray = [];
         networkBuilder.nodeIdArray = []; networkBuilder.linkIdArray = [];
     },
+    hasBeenNotified: false,
     loadInitialNetwork: function(){
         networkBuilder.clearNetwork();
         var newNodesCursor = SelectedItems.find().fetch();
