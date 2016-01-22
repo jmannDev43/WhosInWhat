@@ -45,15 +45,19 @@ loadMovieCast = function(){
     var sourceId = data.id;
 
     // dynamically determine which server method to call...
-    var methodsByMediaType = {
-        person: 'addActorCredits',
-        movie: 'addMovieCast',
-        tv: 'addTvCast'
+    var infoByMediaType = {
+        person: {methodName: 'addActorCredits', childType: 'movie'},
+        movie: {methodName: 'addMovieCast', childType: 'person'},
+        tv: {methodName: 'addTvCast', childType: 'person'}
     };
-    var methodName = methodsByMediaType[data['media_type']];
+    var methodName = infoByMediaType[data['media_type']].methodName;
 
     Meteor.call(methodName, sourceId, function(err, resp){
 
+        if (resp.length === 0)
+            return Materialize.toast('No results found for ' + data.title + '.', 1500, 'toastError');
+
+        networkBuilder.lastMediaType = infoByMediaType[data['media_type']].childType;
         //var parentNodeWithChildren = _.extend(data, resp);
         data['relatedNodes'] = resp;
         var parentNodeWithChildren = $.map(data, function(el) { return typeof el === 'object' ? el : null });
