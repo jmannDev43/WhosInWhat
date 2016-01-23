@@ -1,4 +1,5 @@
 var mdb = Meteor.npmRequire('moviedb')(Meteor.settings.apiKey);
+
 var lastId;
 
 tmdb = {};
@@ -28,13 +29,9 @@ _.extend(tmdb, {
         });
         return Meteor._get(resp, 'result', 'cast');
     },
-    getActorCredits: function(id){ // eventually refactor to use userId instead of connectionId
-        var resp = Async.runSync(function(done){
-            mdb.personCredits({ id: id }, function(err, credits){
-                done(null, credits);
-            });
-        });
-
-        return Meteor._get(resp, 'result', 'cast');
+    getActorCredits: function(id){
+        var resp = HTTP.call('GET', 'http://api.themoviedb.org/3/person/' + id + '/combined_credits?api_key=' + Meteor.settings.apiKey, {});
+        var credits = resp ? resp.data.cast : [];
+        return credits;
     }
 });
