@@ -5,7 +5,7 @@ Meteor.methods({
         if (!existingRecord){
             // relatedNodes ARE ONLY LOADED FOR SELECTED PEOPLE (NOT SELECTED MOVIES)
             if (data.media_type === 'person'){
-                var credits = tmdb.getActorCredits(data.id);
+                var credits = tmdb.getActorCredits(data.id.toString());
 
                 if (credits){
                     data['relatedNodes'] = credits;

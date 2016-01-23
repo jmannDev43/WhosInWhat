@@ -6,7 +6,6 @@ networkBuilder = {
     linkIdArray: [],
     imageUrl: 'https://image.tmdb.org/t/p/w185',
     imageFields: ['imagePath','poster_path','profile_path'],
-    lastMethodName: '',
     getImagePath: function(el){
         var path;
         var imageField = _.intersection(_.keys(el), networkBuilder.imageFields);
@@ -60,6 +59,7 @@ networkBuilder = {
             }
         });
     },
+
     addNode: function(el){
         var title = networkBuilder.getTitle(el);
         var imagePath = networkBuilder.getImagePath(el);
@@ -72,7 +72,7 @@ networkBuilder = {
                     id: el.id.toString(),
                     title: title,
                     imagePath: imagePath,
-                    media_type: el['media_type'] || networkBuilder.lastMediaType
+                    media_type: el['media_type'] || 'person'
                 }
             });
             networkBuilder.nodeIdArray.push(el.id);
