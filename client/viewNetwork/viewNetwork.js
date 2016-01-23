@@ -57,16 +57,14 @@ loadMovieCast = function(){
         if (resp.length === 0)
             return Materialize.toast('No results found for ' + data.title + '.', 1500, 'toastError');
 
-        networkBuilder.lastMediaType = infoByMediaType[data['media_type']].childType;
         //var parentNodeWithChildren = _.extend(data, resp);
         data['relatedNodes'] = resp;
         var parentNodeWithChildren = $.map(data, function(el) { return typeof el === 'object' ? el : null });
 
         var networkObj = networkBuilder.getNodesAndLinks(parentNodeWithChildren, sourceId);
-        console.log(cy.nodes().length);
+
         cy.add(networkObj.nodes);
         cy.add(networkObj.links);
-        console.log(cy.nodes().length);
 
         var nodes = cy.nodes();
         styleNodes(nodes);
