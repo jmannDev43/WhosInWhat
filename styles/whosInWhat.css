@@ -1,3 +1,7 @@
+html {
+    overflow-y: hidden;
+}
+
 .bg-img {
     background: url('movie-theater.jpg') no-repeat fixed;
     -webkit-background-size: cover;
@@ -22,6 +26,7 @@
     -ms-filter: blur(5px);
     filter: blur(5px);
     transform: scale(1.1);
+    z-index: -1;
 }
 
 .content {
@@ -35,7 +40,7 @@
 
 .srchInputs {
     background: rgba(255,255,255,0.75);
-    margin-top: 20px;
+    /*margin-top: 20px;*/
     border-radius: 1px;
     box-shadow: 0 0 0 1px rgba(0,0,0,0.26),2px 1px 5px 0 rgba(0,0,0,0.26);
     padding-top: 7px !important;
@@ -52,7 +57,8 @@
 
 .collection{
     margin-top: 1px;
-    max-height: 85vh;
+    /*max-height: 67vh;*/
+    max-height: 450px;
     overflow-y: scroll;
 }
 
@@ -69,9 +75,12 @@
 }
 
 .resultSelection {
-    position:fixed;
+    position: fixed;
     /*padding:5px;*/
-    bottom:0px;
+    bottom: 0px;
+    left: 0px !important;
+    max-height: 450px;
+    overflow-y: auto;
 }
 
 .resultSelection .collection{
@@ -130,11 +139,52 @@ input:not([type]):focus:not([readonly]) + label, input[type=text]:focus:not([rea
     background-color: #cd5656;
 }
 
+.img-credit {
+    position: absolute;
+    color: #bfbfbf;
+    bottom: 0px;
+    right: 5px;
+    font-style: italic;
+    font-size: 9px;
+}
+
+@font-face {
+    font-family: 'SignPainter';
+    src: url('../fonts/SignPainter-HouseScript.ttf') format('truetype');
+}
+
+.logoText {
+    font-family: 'SignPainter';
+    text-shadow: 4px 4px 3px #565656;
+    color: white;
+    text-align: center;
+    font-size: 150px;
+    max-height: 180px;
+}
+
+@media only screen and (max-width: 1005px){
+    .logoText {
+        font-size: 85px;
+    }
+}
+
+@media only screen and (max-width: 442px){
+    .logoText {
+        font-size: 68px;
+    }
+}
+
+.returnToSearch {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
 /* Cytoscape styles */
 
 .cytoscapeCtnr {
     height: 100vh;
-    width: 97.5vw;
+    width: 100vw;
     position: absolute;
     left: 0;
     top: 0;

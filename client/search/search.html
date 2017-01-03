@@ -1,16 +1,27 @@
 <template name="search">
+    <div class="logoText">Who's in What?</div>
     <div class="src-cntr">
-        <form class="offset-m4">
+        <form class="">
             <div class="row">
-                <div class="srchInputs col offset-l5 s7">
+                {{#if selectedItemsExist}}
+                    <div class="">
+                        <button class="btn col s5 l2 m3 offset-s2 offset-l7 offset-m5 waves-effect waves-light blue darken-3 createNetwork" type="submit" name="action">View Graph
+                            <i class="fa fa-arrow-circle-right"></i>
+                        </button>
+                        <button class="btn col s5 l2 m3 waves-effect waves-light blue lighten-1 clearSelected" type="submit" name="action">Clear
+                            <i class="fa fa-eraser"></i>
+                        </button>
+                    </div>
+                {{/if}}
+                <div class="srchInputs col s12 l10 offset-l1 m10 offset-m1">
                     <div class="input-field">
                         <input id="movie" type="text" class="validate movieTxt">
                         <label for="movie">Enter Movie, TV Show, or Actor Name (then Tab/Enter)</label>
                     </div>
                 </div>
             <div class="row">
-                <div class="srchResults col offset-l5 s6">
-                    <div class="col s12">
+                <div class="srchResults col s12 l10 offset-l1 m10 offset-m1">
+                    <div>
                         {{#if resultsExists}}
                         <ul class="collection">
                             {{#each searchResults}}

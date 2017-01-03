@@ -36,7 +36,8 @@ Meteor.methods({
         SelectedItems.remove({_id: _id});
     },
     clearSelections: function(){
-        SelectedItems.remove({ connectionId: this.connection.id });
+        SelectedItems.remove({});
+        // SelectedItems.remove({ connectionId: this.connection.id });
     },
     clearNetwork: function(){
         Nodes.remove({});

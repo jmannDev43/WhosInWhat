@@ -1,15 +1,8 @@
 <template name="selection">
     <div class="row">
         <div class="resultSelection col s12">
-            <div class="col offset-l10 s3">
-                {{#if hasSelectedItems}}
-                <button class="btn waves-effect waves-light blue darken-3 createNetwork" type="submit" name="action">Create Network
-                    <i class="fa fa-arrow-circle-right"></i>
-                </button>
-                {{/if}}
-            </div>
             <div class="col s12">
-                <div class="col s4">
+                <div class="col l4 s12 m8 offset-m2">
                     {{#if actorsExist}}
                     <ul class="collection">
                         <li class="selectionType">
@@ -21,7 +14,7 @@
                     </ul>
                     {{/if}}
                 </div>
-                <div class="col s4">
+                <div class="col l4 s12 m8 offset-m2">
                     {{#if moviesExist}}
                     <ul class="collection">
                         <li class="selectionType">
@@ -33,7 +26,7 @@
                     </ul>
                     {{/if}}
                 </div>
-                <div class="col s4">
+                <div class="col l4 s12 m8 offset-m2">
                     {{#if tvShowsExist}}
                     <ul class="collection">
                         <li class="selectionType">

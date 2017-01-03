@@ -33,7 +33,7 @@ Meteor.publish('searchResults', function(srchStr){
 });
 
 Meteor.publish('selectedItems', function() {
-    return SelectedItems.find({ connectionId: this.connection.id });
+    return SelectedItems.find();
 });
 
 Meteor.publish('nodes', function(){
