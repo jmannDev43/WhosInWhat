@@ -9,3 +9,15 @@
     - Click movies / TV shows to display its cast.
     
 ![search](./public/graph.png)
+
+#### Running Locally
+
+To run the app locally, you'll need to request an **API key** from themoviedb.org. (https://developers.themoviedb.org/3/getting-started/authentication).
+
+ Create a `settings.json` file at the root of this project directory and paste the API key in, like below:  
+ 
+ ```
+{
+    "apiKey": "REPLACE-WITH-API-KEY"
+}
+```
